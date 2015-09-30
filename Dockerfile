@@ -2,7 +2,7 @@ FROM php:fpm
 MAINTAINER Shingo <shingo@tellustek.com> 
 
 # Install PHP extensions
-RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev zip unzip && rm -rf /var/lib/apt/lists/* \
+RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev zip unzip \
 	&& docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
 	&& docker-php-ext-install gd
 RUN docker-php-ext-install mysqli
@@ -33,11 +33,18 @@ RUN apt-get install -y nginx
 # Copy joomla into /var/www/html
 # Forward request and error logs to docker log collector 
 # Remove useless source
-RUN tar cf - --one-file-system -C /usr/src/joomla /var/www/html | tar xf - \
-    && ln -sf /dev/stdout /var/log/nginx/access.log \
+RUN ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log \
     && rm -rf /var/lib/apt/lists/*
 
+COPY docker-entrypoint.sh /entrypoint.sh
+COPY makedb.php /makedb.php
+COPY webhook.php /var/www/html/webhook.php
+COPY config/nginx/default /etc/nginx/sites-available/default
+COPY config/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY config/php-fpm/php-fpm.conf /usr/etc/php-fpm.conf
+
 EXPOSE 80 443
 
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
