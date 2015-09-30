@@ -42,7 +42,7 @@ COPY makedb.php /makedb.php
 COPY webhook.php /var/www/html/webhook.php
 COPY config/nginx/default /etc/nginx/sites-available/default
 COPY config/nginx/nginx.conf /etc/nginx/nginx.conf
-COPY config/php-fpm/php-fpm.conf /usr/etc/php-fpm.conf
+COPY config/php-fpm/php-fpm.conf /usr/local/etc/php-fpm.conf
 
 EXPOSE 80 443
 
