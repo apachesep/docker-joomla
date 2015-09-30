@@ -37,12 +37,13 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log \
     && rm -rf /var/lib/apt/lists/*
 
-COPY docker-entrypoint.sh /entrypoint.sh
-COPY makedb.php /makedb.php
-COPY webhook.php /var/www/html/webhook.php
-COPY config/nginx/default /etc/nginx/sites-available/default
-COPY config/nginx/nginx.conf /etc/nginx/nginx.conf
-COPY config/php-fpm/php-fpm.conf /usr/local/etc/php-fpm.conf
+ADD ./docker-entrypoint.sh /entrypoint.sh
+ADD ./makedb.php /makedb.php
+ADD ./webhook.php /var/www/html/webhook.php
+ADD ./config/nginx/default /etc/nginx/sites-available/default
+ADD ./config/nginx/nginx.conf /etc/nginx/nginx.conf
+ADD ./config/php-fpm/php-fpm.conf /usr/local/etc/php-fpm.conf
+ADD ./config/supervisord.conf /etc/supervisord.conf
 
 EXPOSE 80 443
 

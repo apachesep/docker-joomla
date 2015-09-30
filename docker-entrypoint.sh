@@ -67,4 +67,8 @@ set -e
         echo >&2
         echo >&2 "========================================================================"
 
+
+# Start supervisord and services
+/usr/bin/supervisord -n -c /etc/supervisord.conf
+
 exec "$@"
