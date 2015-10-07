@@ -43,7 +43,6 @@ ADD ./webhook.php /var/www/html/webhook.php
 ADD ./config/nginx/default /etc/nginx/sites-available/default
 ADD ./config/nginx/nginx.conf /etc/nginx/nginx.conf
 ADD ./config/php-fpm/php-fpm.conf /usr/local/etc/php-fpm.conf
-ADD ./config/supervisord.conf /etc/supervisord.conf
 
 EXPOSE 80 443
 

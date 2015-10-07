@@ -19,12 +19,20 @@ set -e
                 exit 1
         fi
 
+        if [ -z "$PROJECT_NAME" ]; then
+                echo >&2 "error: missing PROJECT_NAME environment variable"
+                echo >&2 "  Did you forget to set with -e PROJECT_NAME=xxxxxx"
+                exit 1
+        fi
+
         # If the DB user is 'root' then use the MySQL root password env var
         : ${JOOMLA_DB_USER:=root}
         if [ "$JOOMLA_DB_USER" = 'root' ]; then
                 : ${JOOMLA_DB_PASSWORD:=$MYSQL_ENV_MYSQL_ROOT_PASSWORD}
         fi
         : ${JOOMLA_DB_NAME:=joomla}
+
+        : ${PROJECT_PASSWORD:=$(cat /dev/urandom | tr -dc '0-9!@#$%a-zA-Z' | head -c12)}
 
         if [ -z "$JOOMLA_DB_PASSWORD" ]; then
                 echo >&2 "error: missing required JOOMLA_DB_PASSWORD environment variable"
@@ -54,7 +62,7 @@ set -e
         fi
 
         # Ensure the MySQL Database is created
-        php /makedb.php "$JOOMLA_DB_HOST" "$JOOMLA_DB_USER" "$JOOMLA_DB_PASSWORD" "$JOOMLA_DB_NAME"
+        php /makedb.php "$JOOMLA_DB_HOST" "$JOOMLA_DB_USER" "$JOOMLA_DB_PASSWORD" "$PROJECT_NAME" "$PROJECT_PASSWORD"
 
         echo >&2 "========================================================================"
         echo >&2
@@ -64,6 +72,8 @@ set -e
         echo >&2 "Database Name: $JOOMLA_DB_NAME"
         echo >&2 "Database Username: $JOOMLA_DB_USER"
         echo >&2 "Database Password: $JOOMLA_DB_PASSWORD"
+	echo >&2 "Project Name: $PROJECT_NAME"
+	echo >&2 "Project Password: $PROJECT_PASSWORD"
         echo >&2
         echo >&2 "========================================================================"
 
