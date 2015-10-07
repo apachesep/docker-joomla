@@ -5,4 +5,5 @@
 # 執行方式
 docker run --name 專案名稱 --link dev-mysql:mysql <br>
            -v /container/專案名稱:/var/www/html <br>
+           -e PROJECT_NAME=xxxxxx <br>
            -P -d tellustek/joomla-fpm-nginx
