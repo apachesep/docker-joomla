@@ -1,5 +1,7 @@
 <?php
-// Args: 0 => makedb.php, 1 => "$JOOMLA_DB_HOST", 2 => "$JOOMLA_DB_USER", 3 => "$JOOMLA_DB_PASSWORD", 4 => "$JOOMLA_DB_NAME"
+// Args: 0 => makedb.php, 1 => "$JOOMLA_DB_HOST", 2 => "$SUPERUSER", 3 => "$SA_PASSWORD", 
+//       4 => "$PROJECT_NAME", 5 => "PROJECT_PASSWORD"
+
 $stderr = fopen('php://stderr', 'w');
 fwrite($stderr, "\nEnsuring Joomla database is present\n");
 if (strpos($argv[1], ':') !== false)
@@ -27,6 +29,15 @@ do
 	}
 }
 while ($mysql->connect_error);
+
+
+// create user
+if ($mysql->query('CREATE USER `' . $argv[4] . '`@`' . $host . '` IDENTIFIED BY `'.$argv[5].'`')){
+	fwrite($stderr, "\nMySQL User Created\n");
+}else{
+	fwrite($stderr, "\nMySQL 'CREATE USER' Error:" . $mysql->error . "\n");
+}
+
 if (!$mysql->query('CREATE DATABASE IF NOT EXISTS `' . $mysql->real_escape_string($argv[4]) . '`'))
 {
 	fwrite($stderr, "\nMySQL 'CREATE DATABASE' Error: " . $mysql->error . "\n");
@@ -34,4 +45,10 @@ if (!$mysql->query('CREATE DATABASE IF NOT EXISTS `' . $mysql->real_escape_strin
 	exit(1);
 }
 fwrite($stderr, "\nMySQL Database Created\n");
+
+// set permissions
+$mysql->query('grant all on `'. $argv[4] .'`.* to `'. $argv[4] .'`@`'.$host.'`);
+
+
+
 $mysql->close();
