@@ -28,6 +28,15 @@ do
 	}
 }
 while ($mysql->connect_error);
+
+
+// create user
+if ($mysql->query("CREATE USER '".$mysql->real_escape_string($argv[4])."'@'%' IDENTIFIED BY '". $mysql->real_escape_string($argv[5]) ."'")){
+	fwrite($stderr, "\nMySQL User Created\n");
+} else {
+	fwrite($stderr, "\nMySQL 'CREATE USER' Error:" . $mysql->error . "\n");
+}
+
 if (!$mysql->query('CREATE DATABASE IF NOT EXISTS `' . $mysql->real_escape_string($argv[4]) . '`'))
 {
 	fwrite($stderr, "\nMySQL 'CREATE DATABASE' Error: " . $mysql->error . "\n");
@@ -35,4 +44,10 @@ if (!$mysql->query('CREATE DATABASE IF NOT EXISTS `' . $mysql->real_escape_strin
 	exit(1);
 }
 fwrite($stderr, "\nMySQL Database Created\n");
+
+// set permissions
+$mysql->query("GRANT ALL PRIVILEGES ON `".$mysql->real_escape_string($argv[4])."`.* TO '".$mysql->real_escape_string($argv[4])."'@'%'");
+
+
+
 $mysql->close();
