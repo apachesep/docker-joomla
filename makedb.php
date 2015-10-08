@@ -32,9 +32,9 @@ while ($mysql->connect_error);
 
 
 // create user
-if ($mysql->query('CREATE USER `' . $argv[4] . '`@`' . $host . '` IDENTIFIED BY `'.$argv[5].'`')){
+if ($mysql->query("CREATE USER '".$mysql->real_escape_string($argv[4])."'@'%' IDENTIFIED BY '". $mysql->real_escape_string($argv[5]) ."'")){
 	fwrite($stderr, "\nMySQL User Created\n");
-}else{
+} else {
 	fwrite($stderr, "\nMySQL 'CREATE USER' Error:" . $mysql->error . "\n");
 }
 
@@ -47,7 +47,7 @@ if (!$mysql->query('CREATE DATABASE IF NOT EXISTS `' . $mysql->real_escape_strin
 fwrite($stderr, "\nMySQL Database Created\n");
 
 // set permissions
-$mysql->query('grant all on `'. $argv[4] .'`.* to `'. $argv[4] .'`@`'.$host.'`);
+$mysql->query("GRANT ALL PRIVILEGES ON `".$mysql->real_escape_string($argv[4])."`.* TO '".$mysql->real_escape_string($argv[4])."'@'%'");
 
 
 
