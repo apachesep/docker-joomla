@@ -1,5 +1,6 @@
 <?php
-// Args: 0 => makedb.php, 1 => "$JOOMLA_DB_HOST", 2 => "$JOOMLA_DB_USER", 3 => "$JOOMLA_DB_PASSWORD", 4 => "$JOOMLA_DB_NAME"
+// Args: 0 => makedb.php, 1 => "$JOOMLA_DB_HOST", 2 => "$SUPERUSER", 3 => "$SA_PASSWORD", 
+//       4 => "$PROJECT_NAME", 5 => "PROJECT_PASSWORD"
 $stderr = fopen('php://stderr', 'w');
 fwrite($stderr, "\nEnsuring Joomla database is present\n");
 if (strpos($argv[1], ':') !== false)
