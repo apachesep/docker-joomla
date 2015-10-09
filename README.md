@@ -7,3 +7,6 @@ docker run --name 專案名稱 --link dev-mysql:mysql <br>
            -v /container/專案名稱:/var/www/html <br>
            -e PROJECT_NAME=xxxxxx <br>
            -P -d tellustek/joomla-fpm-nginx
+
+資料庫連結部份, 可用--link與另一mysql docker連結, 或是使用JOOMLA_DB_HOST變數指定
+
